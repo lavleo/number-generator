@@ -1,26 +1,19 @@
-CXX = g++
-CXXFLAGS = -Wall -Wextra -std=c++11
-TARGET = number-generator
-SOURCES = main.cpp
-OBJECTS = $(SOURCES:.cpp=.o)
+CXX      = x86_64-w64-mingw32-g++
+CXXFLAGS = -Wall -Wextra -std=c++11 -mwindows -DUNICODE -D_UNICODE
+LDFLAGS  = -static -static-libgcc -static-libstdc++ -lcomdlg32
+TARGET   = number-generator.exe
+SOURCES  = main.cpp
+OBJECTS  = $(SOURCES:.cpp=.o)
 
-# Default target
 all: $(TARGET)
 
-# Build the executable
 $(TARGET): $(OBJECTS)
-	$(CXX) $(CXXFLAGS) -o $(TARGET) $(OBJECTS)
+	$(CXX) $(CXXFLAGS) -o $(TARGET) $(OBJECTS) $(LDFLAGS)
 
-# Compile source files to object files
 %.o: %.cpp
 	$(CXX) $(CXXFLAGS) -c $< -o $@
 
-# Clean up compiled files
 clean:
 	rm -f $(OBJECTS) $(TARGET)
 
-# Run the program
-run: $(TARGET)
-	./$(TARGET)
-
-.PHONY: all clean run
+.PHONY: all clean
