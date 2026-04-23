@@ -80,25 +80,17 @@ void PrintNumbers(HWND hwnd) {
     StartPage(hdc);
 
     // Set up font
-    HFONT hFont = CreateFont(24, 0, 0, 0, FW_NORMAL, FALSE, FALSE, FALSE,
+    HFONT hFont = CreateFont(96, 0, 0, 0, FW_NORMAL, FALSE, FALSE, FALSE,
         DEFAULT_CHARSET, OUT_DEFAULT_PRECIS, CLIP_DEFAULT_PRECIS,
-        DEFAULT_QUALITY, DEFAULT_PITCH | FF_MODERN, L"Courier New");
+        DEFAULT_QUALITY, DEFAULT_PITCH | FF_MODERN, L"Arial");
     SelectObject(hdc, hFont);
 
     int pageHeight  = GetDeviceCaps(hdc, VERTRES);
-    int lineHeight  = 32;
+    int lineHeight  = 288;
     int marginX     = 200;
     int marginY     = 200;
     int y           = marginY;
 
-    // Print title
-    HFONT hTitleFont = CreateFont(36, 0, 0, 0, FW_BOLD, FALSE, FALSE, FALSE,
-        DEFAULT_CHARSET, OUT_DEFAULT_PRECIS, CLIP_DEFAULT_PRECIS,
-        DEFAULT_QUALITY, DEFAULT_PITCH | FF_MODERN, L"Courier New");
-    SelectObject(hdc, hTitleFont);
-    TextOut(hdc, marginX, y, L"Generated Numbers", 17);
-    y += lineHeight * 2;
-    DeleteObject(hTitleFont);
     SelectObject(hdc, hFont);
 
     for (int i = 0; i < count; i++) {
