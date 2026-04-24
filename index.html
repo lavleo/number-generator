@@ -1,0 +1,692 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Number Generator</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&family=IBM+Plex+Sans:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  /* ── Tokens ── */
+  :root {
+    --bg:        #0e0f11;
+    --surface:   #16181c;
+    --surface2:  #1e2127;
+    --border:    #2a2d35;
+    --accent:    #e8ff47;
+    --accent2:   #47b8ff;
+    --fg:        #e2e4ea;
+    --fg-muted:  #666b7a;
+    --danger:    #ff5f5f;
+    --radius:    4px;
+    --mono:      'IBM Plex Mono', monospace;
+    --sans:      'IBM Plex Sans', sans-serif;
+  }
+ 
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+ 
+  body {
+    background: var(--bg);
+    color: var(--fg);
+    font-family: var(--sans);
+    font-size: 14px;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 40px 16px 80px;
+  }
+ 
+  /* ── Header ── */
+  header {
+    width: 100%;
+    max-width: 560px;
+    margin-bottom: 32px;
+  }
+  header h1 {
+    font-family: var(--mono);
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: .18em;
+    text-transform: uppercase;
+    color: var(--fg-muted);
+    margin-bottom: 6px;
+  }
+  header p {
+    font-family: var(--mono);
+    font-size: 26px;
+    font-weight: 600;
+    color: var(--fg);
+    letter-spacing: -.02em;
+  }
+  header p span { color: var(--accent); }
+ 
+  /* ── Card ── */
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 24px;
+    width: 100%;
+    max-width: 560px;
+    margin-bottom: 12px;
+  }
+  .card-title {
+    font-family: var(--mono);
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: .14em;
+    text-transform: uppercase;
+    color: var(--fg-muted);
+    margin-bottom: 16px;
+  }
+ 
+  /* ── Form grid ── */
+  .fields {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 12px;
+    margin-bottom: 16px;
+  }
+  .field label {
+    display: block;
+    font-family: var(--mono);
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: .12em;
+    text-transform: uppercase;
+    color: var(--fg-muted);
+    margin-bottom: 6px;
+  }
+  input[type="text"],
+  input[type="number"],
+  select {
+    width: 100%;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    color: var(--fg);
+    font-family: var(--mono);
+    font-size: 14px;
+    padding: 8px 10px;
+    outline: none;
+    transition: border-color .15s;
+    -moz-appearance: textfield;
+  }
+  input[type="number"]::-webkit-inner-spin-button { -webkit-appearance: none; }
+  input:focus, select:focus {
+    border-color: var(--accent);
+    box-shadow: 0 0 0 2px rgba(232,255,71,.1);
+  }
+ 
+  /* ── Buttons ── */
+  .btn-row {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+  button {
+    font-family: var(--mono);
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: .06em;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 9px 18px;
+    cursor: pointer;
+    transition: all .15s;
+    white-space: nowrap;
+  }
+  .btn-primary {
+    background: var(--accent);
+    color: #0e0f11;
+    border-color: var(--accent);
+  }
+  .btn-primary:hover { background: #d4eb20; border-color: #d4eb20; }
+  .btn-secondary {
+    background: transparent;
+    color: var(--fg);
+  }
+  .btn-secondary:hover { background: var(--surface2); border-color: var(--fg-muted); }
+  .btn-ghost {
+    background: transparent;
+    color: var(--fg-muted);
+    border-color: transparent;
+    padding-left: 8px;
+    padding-right: 8px;
+  }
+  .btn-ghost:hover { color: var(--fg); background: var(--surface2); }
+  button:disabled {
+    opacity: .35;
+    cursor: not-allowed;
+  }
+  button:disabled:hover {
+    background: transparent;
+    border-color: var(--border);
+    color: var(--fg-muted);
+  }
+  .btn-primary:disabled:hover {
+    background: var(--accent);
+    border-color: var(--accent);
+    color: #0e0f11;
+  }
+ 
+  /* ── List ── */
+  .list-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+  }
+  .list-count {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--fg-muted);
+  }
+  .list-count span {
+    color: var(--accent2);
+    font-weight: 600;
+  }
+  #output-list {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    height: 220px;
+    overflow-y: auto;
+    padding: 4px 0;
+  }
+  #output-list:empty::after {
+    content: 'No items generated yet.';
+    display: block;
+    padding: 16px;
+    font-family: var(--mono);
+    font-size: 12px;
+    color: var(--fg-muted);
+  }
+  .list-item {
+    font-family: var(--mono);
+    font-size: 13px;
+    padding: 5px 14px;
+    border-bottom: 1px solid rgba(255,255,255,.03);
+    transition: background .1s;
+  }
+  .list-item:last-child { border-bottom: none; }
+  .list-item:hover { background: rgba(255,255,255,.04); }
+  .list-item .num-prefix { color: var(--fg-muted); }
+  .list-item .num-body   { color: var(--fg); }
+ 
+  /* scrollbar */
+  #output-list::-webkit-scrollbar { width: 6px; }
+  #output-list::-webkit-scrollbar-track { background: transparent; }
+  #output-list::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+ 
+  /* ── Print settings ── */
+  .print-fields {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 12px;
+    align-items: end;
+  }
+  .font-preview {
+    font-size: 15px;
+    color: var(--fg);
+    padding: 8px 10px;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .print-row2 {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin-top: 12px;
+  }
+ 
+  /* ── Divider ── */
+  hr { border: none; border-top: 1px solid var(--border); margin: 16px 0; }
+ 
+  /* ── Toast ── */
+  #toast {
+    position: fixed;
+    bottom: 32px;
+    left: 50%;
+    transform: translateX(-50%) translateY(20px);
+    background: var(--surface);
+    border: 1px solid var(--accent);
+    color: var(--accent);
+    font-family: var(--mono);
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: .06em;
+    padding: 10px 20px;
+    border-radius: var(--radius);
+    opacity: 0;
+    transition: opacity .2s, transform .2s;
+    pointer-events: none;
+    z-index: 999;
+  }
+  #toast.show {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+  }
+ 
+  /* ── Preview modal ── */
+  .modal-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,.75);
+    z-index: 100;
+    align-items: center;
+    justify-content: center;
+  }
+  .modal-overlay.open { display: flex; }
+  .modal {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    width: min(520px, 96vw);
+    max-height: 90vh;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+  }
+  .modal-toolbar {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 12px 16px;
+    border-bottom: 1px solid var(--border);
+    flex-shrink: 0;
+  }
+  .modal-toolbar span {
+    font-family: var(--mono);
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+    color: var(--fg-muted);
+    flex: 1;
+  }
+  .page-nav {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-family: var(--mono);
+    font-size: 12px;
+    color: var(--fg-muted);
+  }
+  .modal-body {
+    flex: 1;
+    overflow-y: auto;
+    padding: 24px;
+    background: #888;
+    display: flex;
+    justify-content: center;
+  }
+  /* paper */
+  .paper {
+    background: #fff;
+    color: #111;
+    width: 100%;
+    max-width: 360px;
+    min-height: 465px;  /* letter ratio */
+    box-shadow: 4px 4px 20px rgba(0,0,0,.4);
+    padding: 40px 36px;
+    position: relative;
+  }
+  .paper-items {
+    font-size: 14px;
+    line-height: 1.7;
+  }
+ 
+  /* ── Print styles ── */
+  @media print {
+    body > *:not(#print-frame) { display: none !important; }
+    #print-frame {
+      display: block !important;
+      position: fixed;
+      inset: 0;
+    }
+  }
+  #print-frame { display: none; }
+ 
+  /* ── Error ── */
+  .field-error input { border-color: var(--danger) !important; }
+  .error-msg {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--danger);
+    margin-top: 4px;
+    display: none;
+  }
+  .field-error .error-msg { display: block; }
+</style>
+</head>
+<body>
+ 
+<header>
+  <h1>Tool</h1>
+  <p>Number <span>Generator</span></p>
+</header>
+ 
+<!-- ── Generation card ── -->
+<div class="card">
+  <div class="card-title">Parameters</div>
+  <div class="fields">
+    <div class="field" id="field-prefix">
+      <label>Prefix</label>
+      <input type="text" id="inp-prefix" value="C" maxlength="20">
+    </div>
+    <div class="field" id="field-start">
+      <label>Start</label>
+      <input type="number" id="inp-start" value="1" min="0">
+    </div>
+    <div class="field" id="field-amount">
+      <label>Amount</label>
+      <input type="number" id="inp-amount" value="5" min="1" max="10000">
+      <div class="error-msg" id="err-amount">1 – 10,000</div>
+    </div>
+  </div>
+  <div class="btn-row">
+    <button class="btn-primary" id="btn-generate">Generate</button>
+    <button class="btn-secondary" id="btn-more" disabled>Generate More</button>
+  </div>
+</div>
+ 
+<!-- ── Output card ── -->
+<div class="card">
+  <div class="list-header">
+    <div class="card-title" style="margin-bottom:0">Output</div>
+    <div class="list-count">Items: <span id="count-label">0</span></div>
+  </div>
+  <div id="output-list"></div>
+  <hr>
+  <div class="btn-row">
+    <button class="btn-secondary" id="btn-copy" disabled>Copy All</button>
+    <button class="btn-secondary" id="btn-preview" disabled>Preview</button>
+    <button class="btn-secondary" id="btn-print" disabled>Print…</button>
+    <button class="btn-ghost" id="btn-clear" disabled style="margin-left:auto">Clear</button>
+  </div>
+</div>
+ 
+<!-- ── Print settings card ── -->
+<div class="card">
+  <div class="card-title">Print Settings</div>
+  <div class="print-row2">
+    <div class="field">
+      <label>Font Family</label>
+      <select id="sel-font">
+        <option value="'IBM Plex Mono', monospace">IBM Plex Mono</option>
+        <option value="'Courier New', monospace">Courier New</option>
+        <option value="Georgia, serif">Georgia</option>
+        <option value="'Times New Roman', serif">Times New Roman</option>
+        <option value="Arial, sans-serif">Arial</option>
+        <option value="Verdana, sans-serif">Verdana</option>
+      </select>
+    </div>
+    <div class="field">
+      <label>Size (pt)</label>
+      <input type="number" id="inp-fontsize" value="18" min="6" max="72">
+    </div>
+  </div>
+  <div class="print-row2" style="margin-top:12px">
+    <div class="field">
+      <label>Weight</label>
+      <select id="sel-weight">
+        <option value="400">Normal</option>
+        <option value="700">Bold</option>
+      </select>
+    </div>
+    <div class="field">
+      <label>Items / Page</label>
+      <input type="number" id="inp-ipp" value="20" min="1" max="200">
+    </div>
+  </div>
+</div>
+ 
+<!-- ── Toast ── -->
+<div id="toast"></div>
+ 
+<!-- ── Preview modal ── -->
+<div class="modal-overlay" id="preview-modal">
+  <div class="modal">
+    <div class="modal-toolbar">
+      <span>Print Preview</span>
+      <div class="page-nav">
+        <button class="btn-ghost" id="btn-prev-page" style="padding:4px 8px">&#8592;</button>
+        <span id="page-label" style="color:var(--fg)">1 / 1</span>
+        <button class="btn-ghost" id="btn-next-page" style="padding:4px 8px">&#8594;</button>
+      </div>
+      <button class="btn-primary" id="btn-modal-print" style="padding:7px 14px;font-size:11px">Print…</button>
+      <button class="btn-ghost" id="btn-modal-close">&#10005;</button>
+    </div>
+    <div class="modal-body">
+      <div class="paper">
+        <div class="paper-items" id="paper-content"></div>
+      </div>
+    </div>
+  </div>
+</div>
+ 
+<!-- Hidden print frame -->
+<div id="print-frame"></div>
+ 
+<script>
+// ── State ──────────────────────────────────────────────────────────────────
+const state = {
+  items: [],
+  lastStart:  0,
+  lastAmount: 0,
+  lastPrefix: '',
+  previewPage: 0,
+};
+ 
+// ── DOM refs ───────────────────────────────────────────────────────────────
+const inpPrefix   = document.getElementById('inp-prefix');
+const inpStart    = document.getElementById('inp-start');
+const inpAmount   = document.getElementById('inp-amount');
+const inpFontSize = document.getElementById('inp-fontsize');
+const inpIPP      = document.getElementById('inp-ipp');
+const selFont     = document.getElementById('sel-font');
+const selWeight   = document.getElementById('sel-weight');
+const outputList  = document.getElementById('output-list');
+const countLabel  = document.getElementById('count-label');
+const btnGenerate = document.getElementById('btn-generate');
+const btnMore     = document.getElementById('btn-more');
+const btnCopy     = document.getElementById('btn-copy');
+const btnPreview  = document.getElementById('btn-preview');
+const btnPrint    = document.getElementById('btn-print');
+const btnClear    = document.getElementById('btn-clear');
+const previewModal= document.getElementById('preview-modal');
+const paperContent= document.getElementById('paper-content');
+const pageLabel   = document.getElementById('page-label');
+const btnPrevPage = document.getElementById('btn-prev-page');
+const btnNextPage = document.getElementById('btn-next-page');
+const btnModalPrint=document.getElementById('btn-modal-print');
+const btnModalClose=document.getElementById('btn-modal-close');
+const toast       = document.getElementById('toast');
+const printFrame  = document.getElementById('print-frame');
+ 
+// ── Helpers ────────────────────────────────────────────────────────────────
+function showToast(msg, dur = 2000) {
+  toast.textContent = msg;
+  toast.classList.add('show');
+  clearTimeout(showToast._t);
+  showToast._t = setTimeout(() => toast.classList.remove('show'), dur);
+}
+ 
+function setActionButtons(enabled) {
+  btnMore.disabled    = !enabled;
+  btnCopy.disabled    = !enabled;
+  btnPreview.disabled = !enabled;
+  btnPrint.disabled   = !enabled;
+  btnClear.disabled   = !enabled;
+}
+ 
+function updateCount() {
+  countLabel.textContent = state.items.length;
+}
+ 
+function renderList() {
+  outputList.innerHTML = '';
+  state.items.forEach(item => {
+    const div = document.createElement('div');
+    div.className = 'list-item';
+    // Split prefix from number for styled display
+    const prefix = state.lastPrefix;
+    const numPart = item.slice(prefix.length);
+    div.innerHTML = `<span class="num-prefix">${escHtml(prefix)}</span><span class="num-body">${escHtml(numPart)}</span>`;
+    outputList.appendChild(div);
+  });
+  outputList.scrollTop = outputList.scrollHeight;
+  updateCount();
+}
+ 
+function escHtml(s) {
+  return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+}
+ 
+function getPrintSettings() {
+  return {
+    fontFamily:  selFont.value,
+    fontSize:    Math.max(6, Math.min(72, parseInt(inpFontSize.value) || 18)),
+    fontWeight:  selWeight.value,
+    itemsPerPage:Math.max(1, Math.min(200, parseInt(inpIPP.value) || 20)),
+  };
+}
+ 
+function totalPages() {
+  const ipp = getPrintSettings().itemsPerPage;
+  return Math.max(1, Math.ceil(state.items.length / ipp));
+}
+ 
+// ── Validation ─────────────────────────────────────────────────────────────
+function validate() {
+  const amount = parseInt(inpAmount.value);
+  const fieldEl = document.getElementById('field-amount');
+  if (!amount || amount < 1 || amount > 10000) {
+    fieldEl.classList.add('field-error');
+    return false;
+  }
+  fieldEl.classList.remove('field-error');
+  return true;
+}
+inpAmount.addEventListener('input', () => {
+  document.getElementById('field-amount').classList.remove('field-error');
+});
+ 
+// ── Generate ───────────────────────────────────────────────────────────────
+function doGenerate(start, amount, prefix, append) {
+  if (!append) state.items = [];
+  for (let i = 0; i < amount; i++) {
+    state.items.push(prefix + (start + i));
+  }
+  renderList();
+  setActionButtons(true);
+}
+ 
+btnGenerate.addEventListener('click', () => {
+  if (!validate()) return;
+  state.lastStart  = parseInt(inpStart.value)  || 0;
+  state.lastAmount = parseInt(inpAmount.value) || 5;
+  state.lastPrefix = inpPrefix.value;
+  doGenerate(state.lastStart, state.lastAmount, state.lastPrefix, false);
+});
+ 
+btnMore.addEventListener('click', () => {
+  state.lastStart += state.lastAmount;
+  doGenerate(state.lastStart, state.lastAmount, state.lastPrefix, true);
+});
+ 
+btnClear.addEventListener('click', () => {
+  state.items = [];
+  renderList();
+  setActionButtons(false);
+});
+ 
+// Enter key on inputs triggers generate
+[inpPrefix, inpStart, inpAmount].forEach(el => {
+  el.addEventListener('keydown', e => {
+    if (e.key === 'Enter') btnGenerate.click();
+  });
+});
+ 
+// ── Copy ───────────────────────────────────────────────────────────────────
+btnCopy.addEventListener('click', () => {
+  if (!state.items.length) return;
+  navigator.clipboard.writeText(state.items.join('\r\n'))
+    .then(() => showToast('Copied to clipboard!'))
+    .catch(() => {
+      // fallback
+      const ta = document.createElement('textarea');
+      ta.value = state.items.join('\n');
+      document.body.appendChild(ta);
+      ta.select();
+      document.execCommand('copy');
+      document.body.removeChild(ta);
+      showToast('Copied to clipboard!');
+    });
+});
+ 
+// ── Preview ────────────────────────────────────────────────────────────────
+function renderPreviewPage() {
+  const { fontFamily, fontSize, fontWeight, itemsPerPage } = getPrintSettings();
+  const tp  = totalPages();
+  state.previewPage = Math.max(0, Math.min(state.previewPage, tp - 1));
+ 
+  pageLabel.textContent = `${state.previewPage + 1} / ${tp}`;
+  btnPrevPage.disabled  = state.previewPage === 0;
+  btnNextPage.disabled  = state.previewPage === tp - 1;
+ 
+  const start = state.previewPage * itemsPerPage;
+  const slice = state.items.slice(start, start + itemsPerPage);
+ 
+  paperContent.style.fontFamily = fontFamily;
+  paperContent.style.fontSize   = fontSize + 'px';
+  paperContent.style.fontWeight = fontWeight;
+  paperContent.innerHTML = slice.map(s => `<div>${escHtml(s)}</div>`).join('');
+}
+ 
+btnPreview.addEventListener('click', () => {
+  state.previewPage = 0;
+  renderPreviewPage();
+  previewModal.classList.add('open');
+});
+ 
+btnPrevPage.addEventListener('click', () => { state.previewPage--; renderPreviewPage(); });
+btnNextPage.addEventListener('click', () => { state.previewPage++; renderPreviewPage(); });
+btnModalClose.addEventListener('click', () => previewModal.classList.remove('open'));
+previewModal.addEventListener('click', e => {
+  if (e.target === previewModal) previewModal.classList.remove('open');
+});
+ 
+// ── Print ──────────────────────────────────────────────────────────────────
+function doPrint() {
+  if (!state.items.length) return;
+  const { fontFamily, fontSize, fontWeight, itemsPerPage } = getPrintSettings();
+  const tp = Math.max(1, Math.ceil(state.items.length / itemsPerPage));
+  let pages = '';
+  for (let p = 0; p < tp; p++) {
+    const slice = state.items.slice(p * itemsPerPage, (p + 1) * itemsPerPage);
+    const pageBreak = p < tp - 1 ? 'page-break-after:always;' : '';
+    pages += `<div style="${pageBreak}padding:72px 72px 72px 96px;font-family:${fontFamily};font-size:${fontSize}pt;font-weight:${fontWeight};line-height:1.8;">
+      ${slice.map(s => `<div>${escHtml(s)}</div>`).join('')}
+    </div>`;
+  }
+  printFrame.innerHTML = pages;
+  window.print();
+  setTimeout(() => { printFrame.innerHTML = ''; }, 1000);
+}
+ 
+btnPrint.addEventListener('click', doPrint);
+btnModalPrint.addEventListener('click', () => {
+  previewModal.classList.remove('open');
+  setTimeout(doPrint, 100);
+});
+</script>
+</body>
+</html>
