@@ -829,10 +829,13 @@ function doPrint() {
   for (let p = 0; p < tp; p++) {
     const slice = state.items.slice(p * itemsPerPage, (p + 1) * itemsPerPage);
     const pb = p < tp - 1 ? 'page-break-after:always;' : '';
-    pages += `<div style="${pb}padding:72px 72px 72px 96px;font-family:${fontFamily};font-size:${fontSize}pt;font-weight:${fontWeight};line-height:1.8;color:#000;">${slice.map(s => `<div>${escHtml(s)}</div>`).join('')}</div>`;  }
-  printFrame.innerHTML = pages;
-  window.print();
-  setTimeout(() => { printFrame.innerHTML = ''; }, 1000);
+    pages += `<div style="${pb}padding:72px 72px 72px 96px;font-family:${fontFamily};font-size:${fontSize}pt;font-weight:${fontWeight};line-height:1.8;color:#000;">${slice.map(s => `<div>${escHtml(s)}</div>`).join('')}</div>`;
+  }
+  const win = window.open('', '_blank');
+  win.document.write(`<!DOCTYPE html><html><head><title>Print</title><style>*{margin:0;padding:0;box-sizing:border-box;}body{background:#fff;color:#000;}@media print{body{margin:0;}}</style></head><body>${pages}</body></html>`);
+  win.document.close();
+  win.focus();
+  win.onload = () => { win.print(); win.close(); };
 }
 btnPrint.addEventListener('click', doPrint);
 btnModalPrint.addEventListener('click', () => { previewModal.classList.remove('open'); setTimeout(doPrint, 100); });
