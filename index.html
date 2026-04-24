@@ -829,8 +829,7 @@ function doPrint() {
   for (let p = 0; p < tp; p++) {
     const slice = state.items.slice(p * itemsPerPage, (p + 1) * itemsPerPage);
     const pb = p < tp - 1 ? 'page-break-after:always;' : '';
-    pages += `<div style="${pb}padding:72px 72px 72px 96px;font-family:${fontFamily};font-size:${fontSize}pt;font-weight:${fontWeight};line-height:1.8;">${slice.map(s => `<div>${escHtml(s)}</div>`).join('')}</div>`;
-  }
+    pages += `<div style="${pb}padding:72px 72px 72px 96px;font-family:${fontFamily};font-size:${fontSize}pt;font-weight:${fontWeight};line-height:1.8;color:#000;">${slice.map(s => `<div>${escHtml(s)}</div>`).join('')}</div>`;  }
   printFrame.innerHTML = pages;
   window.print();
   setTimeout(() => { printFrame.innerHTML = ''; }, 1000);
