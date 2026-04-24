@@ -503,7 +503,7 @@ hr { border: none; border-top: 1px solid var(--border); margin: 16px 0; }
 /* ── Print ── */
 @media print {
   body > *:not(#print-frame) { display: none !important; }
-  #print-frame { display: block !important; position: fixed; inset: 0; }
+  #print-frame { display: block !important; }  /* removed position:fixed/inset */
 }
 #print-frame { display: none; }
 
