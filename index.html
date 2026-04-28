@@ -660,7 +660,7 @@ button:disabled {
       </select>
     </div>
     <div class="field">
-      <label>Per Page</label>
+      <label>the ge</label>
       <div class="perpage-field">
         <input type="number" id="inp-perpage" value="5" min="1" max="500">
         <div class="perpage-steppers">
@@ -768,11 +768,11 @@ function getPerPage() {
 }
 
 // ── Auto font-size calculation ──
-// Letter page: 792pt tall, margins ~96pt top+bottom = 600pt usable
+// Letter page: 792pt tall, margins ~120pt top+bottom = 552pt usable
 // Line height 1.75, so each item = fontSize * 1.75 pt
 // fontSize = usableHeight / (perPage * lineHeight)
 const PAGE_HEIGHT_PT = 792;
-const MARGIN_PT      = 96;
+const MARGIN_PT      = 120;
 const LINE_HEIGHT    = 1.75;
 const MAX_FONT       = 144;
 
@@ -997,9 +997,9 @@ function doPrint() {
   win.document.write(`<!DOCTYPE html><html><head><title>Print</title><style>
     *{margin:0;padding:0;box-sizing:border-box;}
     body{background:#fff;color:#000;font-family:${fontFamily};font-size:${fontSize}pt;font-weight:${fontWeight};line-height:${LINE_HEIGHT};}
-    .page{padding:96pt 72pt;page-break-after:always;}
+    .page{padding:120pt 72pt;page-break-after:always;}
     .page:last-child{page-break-after:avoid;}
-    @media print{body{margin:0;}.page{padding:96pt 72pt;}}
+    @media print{body{margin:0;}.page{padding:120pt 72pt;}}
   </style></head><body>${pageHtml}</body></html>`);
   win.document.close();
   win.focus();
