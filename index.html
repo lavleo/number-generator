@@ -69,7 +69,6 @@ body {
   position: relative;
 }
 
-/* Grid background */
 body::before {
   content: '';
   position: fixed;
@@ -82,7 +81,6 @@ body::before {
   z-index: 0;
 }
 
-/* ── Layout wrapper ── */
 .layout {
   width: 100%;
   max-width: 520px;
@@ -97,7 +95,6 @@ header {
   justify-content: space-between;
   margin-bottom: 36px;
 }
-.header-left {}
 .header-eyebrow {
   font-family: 'Syne', sans-serif;
   font-size: 10px;
@@ -115,9 +112,7 @@ header {
   letter-spacing: -0.03em;
   color: var(--fg);
 }
-.header-title span {
-  color: var(--accent);
-}
+.header-title span { color: var(--accent); }
 
 /* ── Theme toggle ── */
 .theme-toggle {
@@ -132,22 +127,16 @@ header {
   transition: all 0.2s;
   margin-top: 4px;
 }
-.theme-toggle:hover {
-  border-color: var(--border-hover);
-}
+.theme-toggle:hover { border-color: var(--border-hover); }
 .theme-toggle svg {
-  width: 14px;
-  height: 14px;
-  flex-shrink: 0;
-  fill: var(--fg);
+  width: 14px; height: 14px;
+  flex-shrink: 0; fill: var(--fg);
   transition: opacity 0.2s;
 }
 .icon-sun  { opacity: var(--icon-sun); }
 .icon-moon { opacity: var(--icon-moon); }
-
 .toggle-track {
-  width: 28px;
-  height: 16px;
+  width: 28px; height: 16px;
   background: var(--surface-3);
   border-radius: 100px;
   border: 1px solid var(--border);
@@ -155,18 +144,13 @@ header {
   transition: background 0.2s;
 }
 .toggle-thumb {
-  position: absolute;
-  top: 2px;
-  left: 2px;
-  width: 10px;
-  height: 10px;
+  position: absolute; top: 2px; left: 2px;
+  width: 10px; height: 10px;
   border-radius: 50%;
   background: var(--accent);
   transition: transform 0.2s cubic-bezier(0.34,1.56,0.64,1);
 }
-[data-theme="light"] .toggle-thumb {
-  transform: translateX(12px);
-}
+[data-theme="light"] .toggle-thumb { transform: translateX(12px); }
 
 /* ── Cards ── */
 .card {
@@ -177,7 +161,17 @@ header {
   margin-bottom: 10px;
   box-shadow: var(--shadow);
   transition: background 0.3s, border-color 0.3s, box-shadow 0.3s;
+  animation: card-in 0.35s ease both;
 }
+.card:nth-child(1) { animation-delay: 0.05s; }
+.card:nth-child(2) { animation-delay: 0.10s; }
+.card:nth-child(3) { animation-delay: 0.15s; }
+@keyframes card-in {
+  from { opacity: 0; transform: translateY(12px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+header { animation: card-in 0.3s ease both; }
+
 .card-header {
   display: flex;
   align-items: center;
@@ -191,15 +185,6 @@ header {
   letter-spacing: 0.18em;
   text-transform: uppercase;
   color: var(--fg-3);
-}
-.card-badge {
-  font-family: 'DM Mono', monospace;
-  font-size: 11px;
-  color: var(--accent-2);
-  background: var(--accent-dim);
-  border-radius: 4px;
-  padding: 2px 7px;
-  transition: all 0.2s;
 }
 
 /* ── Fields ── */
@@ -243,6 +228,35 @@ input:focus, select:focus {
   border-color: var(--accent);
   background: var(--surface);
   box-shadow: 0 0 0 3px var(--accent-dim);
+}
+
+/* Per-page field highlight when synced */
+#inp-perpage.synced {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+/* Auto-size display badge */
+.autosize-badge {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 9px 11px;
+  transition: background 0.3s, border-color 0.3s;
+}
+.autosize-value {
+  font-family: 'DM Mono', monospace;
+  font-size: 13px;
+  color: var(--accent);
+  font-weight: 500;
+  flex: 1;
+}
+.autosize-unit {
+  font-size: 10px;
+  color: var(--fg-3);
 }
 
 /* ── Buttons ── */
@@ -342,22 +356,35 @@ button:disabled {
 }
 .list-item:last-child { border-bottom: none; }
 .list-item:hover { background: var(--surface-3); }
-.num-index {
-  color: var(--fg-3);
-  font-size: 10px;
-  width: 28px;
-  flex-shrink: 0;
-}
+.num-index { color: var(--fg-3); font-size: 10px; width: 28px; flex-shrink: 0; }
 .num-prefix { color: var(--accent); }
 .num-body   { color: var(--fg); }
 
-/* scrollbar */
+/* Page divider in list */
+.list-page-divider {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 4px 14px;
+  background: var(--surface-3);
+  border-bottom: 1px solid var(--border);
+  color: var(--fg-3);
+  font-family: 'Syne', sans-serif;
+  font-size: 8px;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+.list-page-divider::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: var(--border);
+}
+
 #output-list::-webkit-scrollbar { width: 4px; }
 #output-list::-webkit-scrollbar-track { background: transparent; }
 #output-list::-webkit-scrollbar-thumb { background: var(--surface-3); border-radius: 4px; }
-
-/* ── Divider ── */
-hr { border: none; border-top: 1px solid var(--border); margin: 16px 0; }
 
 /* ── Print settings ── */
 .print-grid {
@@ -365,6 +392,43 @@ hr { border: none; border-top: 1px solid var(--border); margin: 16px 0; }
   grid-template-columns: 1fr 1fr;
   gap: 10px;
 }
+
+/* Per-page stepper */
+.perpage-field {
+  position: relative;
+}
+.perpage-field input {
+  padding-right: 56px;
+}
+.perpage-steppers {
+  position: absolute;
+  right: 6px;
+  top: 50%;
+  transform: translateY(-50%);
+  display: flex;
+  gap: 2px;
+}
+.stepper-btn {
+  background: var(--surface-3);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  color: var(--fg-2);
+  font-size: 11px;
+  font-family: 'DM Mono', monospace;
+  width: 20px;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  padding: 0;
+  line-height: 1;
+  letter-spacing: 0;
+  text-transform: none;
+  font-weight: 400;
+  transition: background 0.1s, color 0.1s;
+}
+.stepper-btn:hover { background: var(--accent-dim); color: var(--accent); border-color: var(--accent); }
 
 /* ── Error ── */
 .field-error input { border-color: var(--danger) !important; box-shadow: 0 0 0 3px rgba(255,87,87,0.1) !important; }
@@ -399,10 +463,7 @@ hr { border: none; border-top: 1px solid var(--border); margin: 16px 0; }
   box-shadow: var(--shadow-lg);
   white-space: nowrap;
 }
-#toast.show {
-  opacity: 1;
-  transform: translateX(-50%) translateY(0);
-}
+#toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
 
 /* ── Modal ── */
 .modal-overlay {
@@ -450,35 +511,36 @@ hr { border: none; border-top: 1px solid var(--border); margin: 16px 0; }
   color: var(--fg-3);
   flex: 1;
 }
-.page-nav {
+
+/* Page tabs in modal */
+.modal-page-tabs {
   display: flex;
-  align-items: center;
-  gap: 6px;
-  font-size: 11px;
-  color: var(--fg-2);
+  gap: 4px;
+  padding: 10px 16px;
+  border-bottom: 1px solid var(--border);
+  overflow-x: auto;
+  flex-shrink: 0;
 }
-.page-nav-btn {
-  width: 26px;
-  height: 26px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 14px;
-  background: var(--surface-2);
-  border: 1px solid var(--border);
-  border-radius: 6px;
-  color: var(--fg-2);
-  cursor: pointer;
-  padding: 0;
-  font-family: inherit;
+.modal-page-tabs::-webkit-scrollbar { display: none; }
+.page-tab {
+  font-family: 'Syne', sans-serif;
+  font-size: 9px;
   font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  padding: 5px 10px;
+  border-radius: 6px;
+  border: 1px solid var(--border);
+  background: var(--surface-2);
+  color: var(--fg-3);
+  cursor: pointer;
+  white-space: nowrap;
   transition: all 0.15s;
 }
-.page-nav-btn:hover:not(:disabled) {
-  background: var(--surface-3);
-  border-color: var(--border-hover);
-  color: var(--fg);
-}
+.page-tab:hover { color: var(--fg); background: var(--surface-3); }
+.page-tab.active { background: var(--accent-dim); border-color: var(--accent); color: var(--accent); }
+.modal-page-tabs.single { display: none; }
+
 .modal-body {
   flex: 1;
   overflow-y: auto;
@@ -497,28 +559,17 @@ hr { border: none; border-top: 1px solid var(--border); margin: 16px 0; }
   box-shadow: 0 8px 32px rgba(0,0,0,0.3);
   padding: 48px 40px;
   border-radius: 2px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
 }
 .paper-items { line-height: 1.75; }
 
-/* ── Print ── */
 @media print {
   body > *:not(#print-frame) { display: none !important; }
-  #print-frame { display: block !important; }  /* removed position:fixed/inset */
+  #print-frame { display: block !important; }
 }
 #print-frame { display: none; }
-
-/* ── Subtle entry animations ── */
-.card {
-  animation: card-in 0.35s ease both;
-}
-.card:nth-child(1) { animation-delay: 0.05s; }
-.card:nth-child(2) { animation-delay: 0.10s; }
-.card:nth-child(3) { animation-delay: 0.15s; }
-@keyframes card-in {
-  from { opacity: 0; transform: translateY(12px); }
-  to   { opacity: 1; transform: translateY(0); }
-}
-header { animation: card-in 0.3s ease both; }
 </style>
 </head>
 <body>
@@ -532,13 +583,11 @@ header { animation: card-in 0.3s ease both; }
     <div class="header-title">Number <span>Gen</span></div>
   </div>
   <button class="theme-toggle" id="theme-toggle" title="Toggle theme">
-    <!-- Sun icon -->
     <svg class="icon-sun" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg">
       <circle cx="8" cy="8" r="3.5"/>
       <path d="M8 1v1.5M8 13.5V15M1 8h1.5M13.5 8H15M3.05 3.05l1.06 1.06M11.89 11.89l1.06 1.06M11.89 4.11l1.06-1.06M3.05 12.95l1.06-1.06" stroke-width="1.2" stroke="currentColor" fill="none" stroke-linecap="round"/>
     </svg>
     <div class="toggle-track"><div class="toggle-thumb"></div></div>
-    <!-- Moon icon -->
     <svg class="icon-moon" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg">
       <path d="M13.5 10.5a6 6 0 01-8-8 6.5 6.5 0 108 8z"/>
     </svg>
@@ -604,10 +653,6 @@ header { animation: card-in 0.3s ease both; }
       </select>
     </div>
     <div class="field">
-      <label>Size (pt)</label>
-      <input type="number" id="inp-fontsize" value="18" min="6" max="72">
-    </div>
-    <div class="field">
       <label>Weight</label>
       <select id="sel-weight">
         <option value="400">Normal</option>
@@ -615,30 +660,38 @@ header { animation: card-in 0.3s ease both; }
       </select>
     </div>
     <div class="field">
-      <label>Items / Page</label>
-      <input type="number" id="inp-ipp" value="20" min="1" max="200">
+      <label>Per Page</label>
+      <div class="perpage-field">
+        <input type="number" id="inp-perpage" value="5" min="1" max="500">
+        <div class="perpage-steppers">
+          <button class="stepper-btn" id="btn-perpage-dec" tabindex="-1">−</button>
+          <button class="stepper-btn" id="btn-perpage-inc" tabindex="-1">+</button>
+        </div>
+      </div>
+    </div>
+    <div class="field">
+      <label>Auto Font Size</label>
+      <div class="autosize-badge">
+        <span class="autosize-value" id="autosize-display">—</span>
+        <span class="autosize-unit" id="autosize-unit">pt</span>
+      </div>
     </div>
   </div>
 </div>
 
 </div><!-- /layout -->
 
-<!-- ── Toast ── -->
 <div id="toast"></div>
 
 <!-- ── Preview modal ── -->
 <div class="modal-overlay" id="preview-modal">
   <div class="modal">
     <div class="modal-toolbar">
-      <span class="modal-title">Print Preview</span>
-      <div class="page-nav">
-        <button class="page-nav-btn" id="btn-prev-page">&#8592;</button>
-        <span id="page-label">1 / 1</span>
-        <button class="page-nav-btn" id="btn-next-page">&#8594;</button>
-      </div>
+      <span class="modal-title" id="modal-title">Print Preview</span>
       <button class="btn-primary" id="btn-modal-print" style="padding:7px 14px;font-size:10px">Print…</button>
       <button class="btn-ghost" id="btn-modal-close" style="font-size:14px;padding:4px 8px">&#10005;</button>
     </div>
+    <div class="modal-page-tabs" id="modal-page-tabs"></div>
     <div class="modal-body">
       <div class="paper">
         <div class="paper-items" id="paper-content"></div>
@@ -656,35 +709,36 @@ const state = {
   lastStart: 0,
   lastAmount: 0,
   lastPrefix: '',
-  previewPage: 0,
+  currentPreviewPage: 0,
 };
 
 // ── DOM ──
-const inpPrefix    = document.getElementById('inp-prefix');
-const inpStart     = document.getElementById('inp-start');
-const inpAmount    = document.getElementById('inp-amount');
-const inpFontSize  = document.getElementById('inp-fontsize');
-const inpIPP       = document.getElementById('inp-ipp');
-const selFont      = document.getElementById('sel-font');
-const selWeight    = document.getElementById('sel-weight');
-const outputList   = document.getElementById('output-list');
-const countLabel   = document.getElementById('count-label');
-const btnGenerate  = document.getElementById('btn-generate');
-const btnMore      = document.getElementById('btn-more');
-const btnCopy      = document.getElementById('btn-copy');
-const btnPreview   = document.getElementById('btn-preview');
-const btnPrint     = document.getElementById('btn-print');
-const btnClear     = document.getElementById('btn-clear');
-const previewModal = document.getElementById('preview-modal');
-const paperContent = document.getElementById('paper-content');
-const pageLabel    = document.getElementById('page-label');
-const btnPrevPage  = document.getElementById('btn-prev-page');
-const btnNextPage  = document.getElementById('btn-next-page');
-const btnModalPrint= document.getElementById('btn-modal-print');
-const btnModalClose= document.getElementById('btn-modal-close');
-const toast        = document.getElementById('toast');
-const printFrame   = document.getElementById('print-frame');
-const themeToggle  = document.getElementById('theme-toggle');
+const inpPrefix      = document.getElementById('inp-prefix');
+const inpStart       = document.getElementById('inp-start');
+const inpAmount      = document.getElementById('inp-amount');
+const inpPerPage     = document.getElementById('inp-perpage');
+const selFont        = document.getElementById('sel-font');
+const selWeight      = document.getElementById('sel-weight');
+const autosizeDisplay= document.getElementById('autosize-display');
+const autosizeUnit   = document.getElementById('autosize-unit');
+const outputList     = document.getElementById('output-list');
+const countLabel     = document.getElementById('count-label');
+const btnGenerate    = document.getElementById('btn-generate');
+const btnMore        = document.getElementById('btn-more');
+const btnCopy        = document.getElementById('btn-copy');
+const btnPreview     = document.getElementById('btn-preview');
+const btnPrint       = document.getElementById('btn-print');
+const btnClear       = document.getElementById('btn-clear');
+const previewModal   = document.getElementById('preview-modal');
+const paperContent   = document.getElementById('paper-content');
+const btnModalPrint  = document.getElementById('btn-modal-print');
+const btnModalClose  = document.getElementById('btn-modal-close');
+const modalTitle     = document.getElementById('modal-title');
+const modalPageTabs  = document.getElementById('modal-page-tabs');
+const toast          = document.getElementById('toast');
+const themeToggle    = document.getElementById('theme-toggle');
+const btnPerpageDec  = document.getElementById('btn-perpage-dec');
+const btnPerpageInc  = document.getElementById('btn-perpage-inc');
 
 // ── Theme ──
 themeToggle.addEventListener('click', () => {
@@ -708,9 +762,70 @@ function escHtml(s) {
   return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
 }
 
+function getPerPage() {
+  const v = parseInt(inpPerPage.value);
+  return (!v || v < 1) ? 1 : Math.min(v, 500);
+}
+
+// ── Auto font-size calculation ──
+// Letter page: 792pt tall, margins ~96pt top+bottom = 600pt usable
+// Line height 1.75, so each item = fontSize * 1.75 pt
+// fontSize = usableHeight / (perPage * lineHeight)
+const PAGE_HEIGHT_PT = 792;
+const MARGIN_PT      = 96;
+const LINE_HEIGHT    = 1.75;
+const MAX_FONT       = 144;
+
+function calcAutoFontSize(perPage) {
+  if (!perPage || perPage < 1) return null;
+  const usable = PAGE_HEIGHT_PT - MARGIN_PT * 2;
+  const computed = Math.floor(usable / (perPage * LINE_HEIGHT));
+  return Math.max(4, Math.min(MAX_FONT, computed));
+}
+
+function getPageCount() {
+  if (!state.items.length) return 1;
+  return Math.ceil(state.items.length / getPerPage());
+}
+
+function updateAutosizeDisplay() {
+  const perPage = getPerPage();
+  const fs = calcAutoFontSize(perPage);
+  autosizeDisplay.textContent = fs !== null ? fs : '—';
+  const pages = getPageCount();
+  autosizeUnit.textContent = pages > 1 ? `pt · ${pages} pages` : 'pt · 1 page';
+}
+
+// ── Per-page steppers ──
+btnPerpageDec.addEventListener('click', () => {
+  const v = getPerPage();
+  if (v > 1) { inpPerPage.value = v - 1; onPerPageChange(); }
+});
+btnPerpageInc.addEventListener('click', () => {
+  const v = getPerPage();
+  if (v < 500) { inpPerPage.value = v + 1; onPerPageChange(); }
+});
+
+function onPerPageChange() {
+  updateAutosizeDisplay();
+  if (state.items.length) renderList();
+}
+
+inpPerPage.addEventListener('input', onPerPageChange);
+
+// ── Render list (with page dividers) ──
 function renderList() {
   outputList.innerHTML = '';
+  const perPage = getPerPage();
   state.items.forEach((item, i) => {
+    // Page divider
+    if (i % perPage === 0) {
+      const pageNum = Math.floor(i / perPage) + 1;
+      const div = document.createElement('div');
+      div.className = 'list-page-divider';
+      div.textContent = `Page ${pageNum}`;
+      outputList.appendChild(div);
+    }
     const div = document.createElement('div');
     div.className = 'list-item';
     const prefix  = state.lastPrefix;
@@ -720,19 +835,17 @@ function renderList() {
   });
   outputList.scrollTop = outputList.scrollHeight;
   countLabel.textContent = state.items.length;
+  updateAutosizeDisplay();
 }
 
-function getPrint() {
+function getPrintSettings() {
+  const perPage = getPerPage();
   return {
-    fontFamily:   selFont.value,
-    fontSize:     Math.max(6, Math.min(72, parseInt(inpFontSize.value)||18)),
-    fontWeight:   selWeight.value,
-    itemsPerPage: Math.max(1, Math.min(200, parseInt(inpIPP.value)||20)),
+    fontFamily: selFont.value,
+    fontWeight: selWeight.value,
+    fontSize:   calcAutoFontSize(perPage) || 18,
+    perPage,
   };
-}
-
-function totalPages() {
-  return Math.max(1, Math.ceil(state.items.length / getPrint().itemsPerPage));
 }
 
 // ── Validation ──
@@ -744,6 +857,14 @@ function validate() {
   return true;
 }
 inpAmount.addEventListener('input', () => document.getElementById('field-amount').classList.remove('field-error'));
+
+// Sync per-page with amount on generate
+function syncPerPageToAmount(amount) {
+  inpPerPage.value = amount;
+  inpPerPage.classList.add('synced');
+  setTimeout(() => inpPerPage.classList.remove('synced'), 800);
+  onPerPageChange();
+}
 
 // ── Generate ──
 function doGenerate(start, amount, prefix, append) {
@@ -759,6 +880,7 @@ btnGenerate.addEventListener('click', () => {
   state.lastAmount = parseInt(inpAmount.value) || 5;
   state.lastPrefix = inpPrefix.value;
   doGenerate(state.lastStart, state.lastAmount, state.lastPrefix, false);
+  syncPerPageToAmount(state.lastAmount);
   showToast(`Generated ${state.lastAmount} item${state.lastAmount !== 1 ? 's' : ''}`);
 });
 
@@ -772,6 +894,7 @@ btnClear.addEventListener('click', () => {
   state.items = [];
   renderList();
   setActionButtons(false);
+  updateAutosizeDisplay();
   showToast('Cleared');
 });
 
@@ -796,49 +919,98 @@ btnCopy.addEventListener('click', () => {
 });
 
 // ── Preview ──
-function renderPreviewPage() {
-  const { fontFamily, fontSize, fontWeight, itemsPerPage } = getPrint();
-  const tp = totalPages();
-  state.previewPage = Math.max(0, Math.min(state.previewPage, tp - 1));
-  pageLabel.textContent    = `${state.previewPage + 1} / ${tp}`;
-  btnPrevPage.disabled     = state.previewPage === 0;
-  btnNextPage.disabled     = state.previewPage === tp - 1;
-  const slice = state.items.slice(state.previewPage * itemsPerPage, (state.previewPage + 1) * itemsPerPage);
-  paperContent.style.fontFamily = fontFamily;
-  paperContent.style.fontSize   = fontSize + 'px';
-  paperContent.style.fontWeight = fontWeight;
-  paperContent.innerHTML = slice.map(s => `<div>${escHtml(s)}</div>`).join('');
+function getPages() {
+  const { perPage } = getPrintSettings();
+  const pages = [];
+  for (let i = 0; i < state.items.length; i += perPage) {
+    pages.push(state.items.slice(i, i + perPage));
+  }
+  return pages.length ? pages : [[]];
+}
+
+function renderPreviewPage(pageIndex) {
+  const { fontFamily, fontSize, fontWeight } = getPrintSettings();
+  const pages = getPages();
+  const page = pages[pageIndex] || [];
+  state.currentPreviewPage = pageIndex;
+
+  // Scale font for preview: paper is ~344px usable height vs 600pt usable
+  // scale ≈ 344/600 * (96/72) ≈ 0.764
+  const previewFontPx = Math.max(6, Math.floor(fontSize * 0.764));
+  paperContent.style.fontFamily  = fontFamily;
+  paperContent.style.fontSize    = previewFontPx + 'px';
+  paperContent.style.fontWeight  = fontWeight;
+  paperContent.style.lineHeight  = LINE_HEIGHT;
+  paperContent.innerHTML = page.map(s => `<div>${escHtml(s)}</div>`).join('');
+
+  // Update active tab
+  document.querySelectorAll('.page-tab').forEach((t, i) => {
+    t.classList.toggle('active', i === pageIndex);
+  });
+}
+
+function buildPageTabs(pages) {
+  modalPageTabs.innerHTML = '';
+  if (pages.length <= 1) {
+    modalPageTabs.classList.add('single');
+    return;
+  }
+  modalPageTabs.classList.remove('single');
+  pages.forEach((_, i) => {
+    const btn = document.createElement('button');
+    btn.className = 'page-tab' + (i === 0 ? ' active' : '');
+    btn.textContent = `Page ${i + 1}`;
+    btn.addEventListener('click', () => renderPreviewPage(i));
+    modalPageTabs.appendChild(btn);
+  });
+}
+
+function renderPreview() {
+  const pages = getPages();
+  const totalPages = pages.length;
+  modalTitle.textContent = totalPages > 1
+    ? `Print Preview · ${totalPages} Pages`
+    : 'Print Preview · 1 Page';
+  buildPageTabs(pages);
+  renderPreviewPage(0);
 }
 
 btnPreview.addEventListener('click', () => {
-  state.previewPage = 0;
-  renderPreviewPage();
+  renderPreview();
   previewModal.classList.add('open');
 });
-btnPrevPage.addEventListener('click', () => { state.previewPage--; renderPreviewPage(); });
-btnNextPage.addEventListener('click', () => { state.previewPage++; renderPreviewPage(); });
 btnModalClose.addEventListener('click', () => previewModal.classList.remove('open'));
 previewModal.addEventListener('click', e => { if (e.target === previewModal) previewModal.classList.remove('open'); });
 
 // ── Print ──
 function doPrint() {
   if (!state.items.length) return;
-  const { fontFamily, fontSize, fontWeight, itemsPerPage } = getPrint();
-  const tp = Math.max(1, Math.ceil(state.items.length / itemsPerPage));
-  let pages = '';
-  for (let p = 0; p < tp; p++) {
-    const slice = state.items.slice(p * itemsPerPage, (p + 1) * itemsPerPage);
-    const pb = p < tp - 1 ? 'page-break-after:always;' : '';
-    pages += `<div style="${pb}padding:72px 72px 72px 96px;font-family:${fontFamily};font-size:${fontSize}pt;font-weight:${fontWeight};line-height:1.8;color:#000;">${slice.map(s => `<div>${escHtml(s)}</div>`).join('')}</div>`;
-  }
+  const { fontFamily, fontSize, fontWeight, perPage } = getPrintSettings();
+
+  const pages = getPages();
+  const pageHtml = pages.map(page => {
+    const content = page.map(s => `<div>${escHtml(s)}</div>`).join('');
+    return `<div class="page">${content}</div>`;
+  }).join('');
+
   const win = window.open('', '_blank');
-  win.document.write(`<!DOCTYPE html><html><head><title>Print</title><style>*{margin:0;padding:0;box-sizing:border-box;}body{background:#fff;color:#000;}@media print{body{margin:0;}}</style></head><body>${pages}</body></html>`);
+  win.document.write(`<!DOCTYPE html><html><head><title>Print</title><style>
+    *{margin:0;padding:0;box-sizing:border-box;}
+    body{background:#fff;color:#000;font-family:${fontFamily};font-size:${fontSize}pt;font-weight:${fontWeight};line-height:${LINE_HEIGHT};}
+    .page{padding:96pt 72pt;page-break-after:always;}
+    .page:last-child{page-break-after:avoid;}
+    @media print{body{margin:0;}.page{padding:96pt 72pt;}}
+  </style></head><body>${pageHtml}</body></html>`);
   win.document.close();
   win.focus();
   win.onload = () => { win.print(); win.close(); };
 }
+
 btnPrint.addEventListener('click', doPrint);
 btnModalPrint.addEventListener('click', () => { previewModal.classList.remove('open'); setTimeout(doPrint, 100); });
+
+// ── Init ──
+updateAutosizeDisplay();
 </script>
 </body>
 </html>
