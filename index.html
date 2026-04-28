@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" data-theme="dark">
+<html lang="en" data-theme="light">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -40,7 +40,7 @@
   --surface-3:    #ecedf4;
   --border:       rgba(0,0,0,0.07);
   --border-hover: rgba(0,0,0,0.18);
-  --accent:       #5a3af5;
+  --accent:       #2a263fd2;
   --accent-dim:   rgba(90,58,245,0.08);
   --accent-2:     #0076d1;
   --fg:           #1a1d24;
@@ -660,7 +660,7 @@ button:disabled {
       </select>
     </div>
     <div class="field">
-      <label>the ge</label>
+      <label>per page</label>
       <div class="perpage-field">
         <input type="number" id="inp-perpage" value="5" min="1" max="500">
         <div class="perpage-steppers">
@@ -768,11 +768,11 @@ function getPerPage() {
 }
 
 // ── Auto font-size calculation ──
-// Letter page: 792pt tall, margins ~120pt top+bottom = 552pt usable
+// Letter page: 792pt tall, margins ~72pt top+bottom = 648pt usable
 // Line height 1.75, so each item = fontSize * 1.75 pt
 // fontSize = usableHeight / (perPage * lineHeight)
 const PAGE_HEIGHT_PT = 792;
-const MARGIN_PT      = 120;
+const MARGIN_PT      = 72;
 const LINE_HEIGHT    = 1.75;
 const MAX_FONT       = 144;
 
@@ -780,7 +780,7 @@ function calcAutoFontSize(perPage) {
   if (!perPage || perPage < 1) return null;
   const usable = PAGE_HEIGHT_PT - MARGIN_PT * 2;
   const computed = Math.floor(usable / (perPage * LINE_HEIGHT));
-  return Math.max(4, Math.min(MAX_FONT, computed));
+  return (Math.max(4, Math.min(MAX_FONT, computed)));
 }
 
 function getPageCount() {
@@ -880,7 +880,6 @@ btnGenerate.addEventListener('click', () => {
   state.lastAmount = parseInt(inpAmount.value) || 5;
   state.lastPrefix = inpPrefix.value;
   doGenerate(state.lastStart, state.lastAmount, state.lastPrefix, false);
-  syncPerPageToAmount(state.lastAmount);
   showToast(`Generated ${state.lastAmount} item${state.lastAmount !== 1 ? 's' : ''}`);
 });
 
@@ -996,10 +995,11 @@ function doPrint() {
   const win = window.open('', '_blank');
   win.document.write(`<!DOCTYPE html><html><head><title>Print</title><style>
     *{margin:0;padding:0;box-sizing:border-box;}
+    @page { size: letter; margin: 0; }
     body{background:#fff;color:#000;font-family:${fontFamily};font-size:${fontSize}pt;font-weight:${fontWeight};line-height:${LINE_HEIGHT};}
-    .page{padding:120pt 72pt;page-break-after:always;}
+    .page{padding:72pt 72pt;page-break-after:always;}
     .page:last-child{page-break-after:avoid;}
-    @media print{body{margin:0;}.page{padding:120pt 72pt;}}
+    @media print{body{margin:0;}.page{padding:72pt 72pt;}}
   </style></head><body>${pageHtml}</body></html>`);
   win.document.close();
   win.focus();
